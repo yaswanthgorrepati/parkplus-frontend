@@ -13,7 +13,7 @@ const Navbar = () => {
             <div className="h-8 w-8 rounded-full bg-orange-500" />
             <span className="font-semibold font-sans z-1 ml-[-20px] text-lg">
               {" "}
-              Park+ test
+              Park+
             </span>
           </Link>
           {/*<nav className="hidden md:flex items-center gap-6 ml-60 text-sm">*/}
