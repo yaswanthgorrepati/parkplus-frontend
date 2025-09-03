@@ -13,6 +13,11 @@ export default function FilterSidebar({ filterListingData }) {
 
   const section = "bg-white rounded-2xl border px-4 py-4";
   const h = "text-[13px] uppercase tracking-wide text-neutral-500 mb-2";
+
+    useEffect(() => {
+        setType("parking");
+    }, []);
+
   useEffect(() => {
     const data = {
       type,
@@ -73,16 +78,16 @@ export default function FilterSidebar({ filterListingData }) {
       <div className={`${section}`}>
         <p className={h}>Category</p>
         <div className="space-y-2 text-sm">
-          {["storage", "parking"].map((opt) => (
+          {["Storage", "Parking"].map((opt) => (
             <label key={opt} className="flex items-center gap-2">
               <input
                 type="radio"
                 name="type"
-                checked={type === opt}
+                checked={type.toLowerCase() === opt.toLowerCase()}
                 onChange={() => setType(opt)}
               />
               <span className="capitalize">
-                {opt} {opt === "parking" ? "Space" : ""}
+                {opt} {opt === "Parking" ? "Space" : ""}
               </span>
             </label>
           ))}

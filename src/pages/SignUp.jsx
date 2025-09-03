@@ -1,11 +1,12 @@
 import React, {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
-import {GET_TOKEN, LISTING_SEARCH_URL, LOGIN_URL} from "../utils/constants.jsx";
+import {GET_TOKEN, LISTING_SEARCH_URL, LOGIN_URL, SIGN_UP_URL} from "../utils/constants.jsx";
 import {useAuth} from "../utils/AuthContext.jsx";
 
-export default function Login() {
+export default function SignUp() {
     const [email, setEmail] = useState("");
-    const [user, setUser] = useState("");
+    const [userName, setUserName] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
     const [pwd, setPwd] = useState("");
     const [showPwd, setShowPwd] = useState(false);
     const navigate = useNavigate();
@@ -14,33 +15,35 @@ export default function Login() {
 
     function onSubmit(e) {
         e.preventDefault();
-        // TODO: call your auth API
-        console.log({email, user, pwd});
+        // console.log({email, user, pwd});
 
         // console.log(URL);
-        fetch(LOGIN_URL, {
+        fetch(SIGN_UP_URL, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": "Bearer " + GET_TOKEN(),
             },
             body: JSON.stringify({
-                emailOrUsername: user,
-                password: pwd,
+                email: email,
+                username: userName,
+                password:pwd,
+                phone:phoneNumber,
+
             }),
         }).then((res) => {
             if (!res.ok) {
-                throw new Error("Failed to login");
+                throw new Error("Failed to sigup");
             }
             return res.json();
         }).then((data) => {
-            console.log("login success");
-            console.log(data);
-            login(data?.accessToken);
-            navigate("/");
+            console.log("sigup success");
+            console.log(data.userId);
+            // login(data?.accessToken);
+            navigate("/login");
 
         }).catch((err) => {
-            console.log("error in login", err);
+            console.log("error in sigup", err);
             logout();
         })
 
@@ -68,18 +71,42 @@ export default function Login() {
                         <div
                             className="rounded-[28px] bg-white shadow-[0_30px_80px_rgba(2,6,23,0.15)] border border-neutral-200 p-6 md:p-10">
                             <h1 className="text-2xl md:text-[28px] font-extrabold text-center">
-                                Login
+                                SignUp
                             </h1>
 
                             <form onSubmit={onSubmit} className="mt-6 space-y-4">
                                 <div>
                                     <label className="block text-sm font-medium text-neutral-600 mb-2">
-                                        Username/Email
+                                        Username
                                     </label>
                                     <input
-                                        value={user}
-                                        onChange={(e) => setUser(e.target.value)}
-                                        placeholder="username/email"
+                                        value={userName}
+                                        onChange={(e) => setUserName(e.target.value)}
+                                        placeholder="username"
+                                        required
+                                        className="w-full h-12 rounded-full border border-neutral-300 px-4 outline-none focus:border-neutral-800 focus:ring-4 focus:ring-neutral-900/5"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-neutral-600 mb-2">
+                                        Email
+                                    </label>
+                                    <input
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        placeholder="user@email.com"
+                                        required
+                                        className="w-full h-12 rounded-full border border-neutral-300 px-4 outline-none focus:border-neutral-800 focus:ring-4 focus:ring-neutral-900/5"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-neutral-600 mb-2">
+                                        PhoneNumber
+                                    </label>
+                                    <input
+                                        value={phoneNumber}
+                                        onChange={(e) => setPhoneNumber(e.target.value)}
+                                        placeholder="+91-9876543210"
                                         required
                                         className="w-full h-12 rounded-full border border-neutral-300 px-4 outline-none focus:border-neutral-800 focus:ring-4 focus:ring-neutral-900/5"
                                     />
@@ -113,15 +140,9 @@ export default function Login() {
                                     type="submit"
                                     className="w-full h-12 rounded-full bg-gradient-to-r from-red-500 to-orange-500 text-white font-semibold hover:from-red-600 hover:to-orange-600 shadow-md"
                                 >
-                                    Login
+                                    SignUp
                                 </button>
                             </form>
-                            <button
-                                className="mt-6 w-full h-12 rounded-full bg-gradient-to-r from-green-600 to-blue-400 text-white font-semibold hover:from-green-700 hover:to-blue-500 shadow-md"
-                                onClick={() => {navigate("/signUp")}}
-                            >
-                                SignUp
-                            </button>
 
                             <p className="mt-6 text-center text-sm text-neutral-600">
                                 By continuing, you agree to our{" "}
