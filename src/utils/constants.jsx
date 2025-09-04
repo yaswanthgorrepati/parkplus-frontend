@@ -984,6 +984,9 @@ const CREATE_ORDER_API = "/api/v1/payments/create-order"
 const VERIFY_SIGNATURE_API = "/api/v1/payments/verify"
 const LOGIN_API = "/api/v1/auth/login";
 const SIGN_UP_API = "/api/v1/auth/register";
+const PROFILE_API = "/api/v1/users/me";
+const PROFILE_UPDATE_API = "/api/v1/profiles/me";
+const PROFILE_UPDATE_ADDRESS_API = "/api/v1/addresses";
 
 export const GET_TOKEN = () => {
     return localStorage.getItem("token");
@@ -998,3 +1001,6 @@ export const CREATE_ORDER_URL = `${HOST_NAME}${CREATE_ORDER_API}`;
 export const VERIFY_SIGNATURE_URL = `${HOST_NAME}${VERIFY_SIGNATURE_API}`;
 export const LOGIN_URL = `${HOST_NAME}${LOGIN_API}`;
 export const SIGN_UP_URL = `${HOST_NAME}${SIGN_UP_API}`;
+export const PROFILE_URL = `${HOST_NAME}${PROFILE_API}`;
+export const PROFILE_UPDATE_URL = `${HOST_NAME}${PROFILE_UPDATE_API}`;
+export const PROFILE_UPDATE_ADDRESS_URL = `${HOST_NAME}${PROFILE_UPDATE_ADDRESS_API}`;

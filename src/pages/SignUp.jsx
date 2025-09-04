@@ -14,7 +14,12 @@ export default function SignUp() {
 
 
     function onSubmit(e) {
+
         e.preventDefault();
+        if(!email.trim() || !phoneNumber.trim() || !pwd.trim() || !userName.trim()) {
+            console.error("Please enter a valid details address");
+            return;
+        }
         // console.log({email, user, pwd});
 
         // console.log(URL);
