@@ -44,7 +44,7 @@ export default function AccountMenu() {
                 aria-label="Account"
             >
                 <div className="rounded-full bg-neutral-200 grid place-content-center text-2xl overflow-hidden">
-                    <img src={user.avatarUrl} className="object-cover" alt={user?.firstName} />
+                    <img src={user?.avatarUrl} className="object-cover" alt={user?.firstName} />
                 </div>
             </button>
 

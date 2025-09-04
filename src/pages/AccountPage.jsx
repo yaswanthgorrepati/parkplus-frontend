@@ -3,6 +3,7 @@ import FooterWide from "../components/FooterWide.jsx";
 import Navbar from "../components/Navbar.jsx";
 import {GET_TOKEN, PROFILE_UPDATE_ADDRESS_URL, PROFILE_UPDATE_URL, PROFILE_URL} from "../utils/constants.jsx";
 import {useAuth} from "../utils/AuthContext.jsx";
+import FullPageLoader from "../components/FullPageLoader.jsx";
 
 const field =
     "h-11 w-full rounded-xl border border-neutral-300 bg-white px-3 outline-none focus:border-neutral-500 focus:ring-4 focus:ring-neutral-900/5";
@@ -20,6 +21,7 @@ export default function AccountPage() {
     const [address, setAddress] = useState({});
 
     const {token, user, setUser, login, logout} = useAuth();
+    const[loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (token) {
@@ -64,6 +66,7 @@ export default function AccountPage() {
 
     const savePersonalInfo = () => {
         console.log("save profile", profile);
+        setLoading(true);
         fetch(PROFILE_UPDATE_URL, {
             method: "PUT",
             headers: {
@@ -78,11 +81,14 @@ export default function AccountPage() {
             getProfile();
         }).catch(error => {
             console.error(error);
+        }).finally(() => {
+            setLoading(false);
         })
     }
 
     const saveAddress = () => {
         console.log("save address", address);
+        setLoading(true);
         fetch(PROFILE_UPDATE_ADDRESS_URL, {
             method: "POST",
             headers: {
@@ -97,12 +103,15 @@ export default function AccountPage() {
             getProfile();
         }).catch(error => {
             console.error(error);
+        }).finally(() => {
+            setLoading(false);
         })
     }
 
     // console.log("userAuth", user);
     return (
         <>
+            {loading && <FullPageLoader />}
             <Navbar/>
             <div className="bg-neutral-50 text-neutral-900 min-h-dvh">
                 <main className="container-px py-6 max-w-4xl">
@@ -113,7 +122,7 @@ export default function AccountPage() {
                     <section
                         className="bg-white rounded-2xl border border-neutral-200 shadow-[0_10px_30px_rgba(2,6,23,0.06)] p-4 md:p-5 flex items-center gap-4">
                         <div className="h-16 w-16 rounded-full bg-neutral-200 grid place-content-center text-2xl overflow-hidden">
-                            <img src={user.avatarUrl} className="object-cover" alt={user?.firstName} />
+                            <img src={user?.avatarUrl} className="object-cover" alt={user?.firstName} />
                         </div>
                         <div className="min-w-0">
                             <div className="text-[18px] md:text-[20px] font-extrabold leading-tight">

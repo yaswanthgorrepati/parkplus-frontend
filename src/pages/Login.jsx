@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {GET_TOKEN, LISTING_SEARCH_URL, LOGIN_URL} from "../utils/constants.jsx";
 import {useAuth} from "../utils/AuthContext.jsx";
+import FullPageLoader from "../components/FullPageLoader.jsx";
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -10,12 +11,14 @@ export default function Login() {
     const [showPwd, setShowPwd] = useState(false);
     const navigate = useNavigate();
     const { token, user: userAuth, login, logout } = useAuth();
+    const [loading, setLoading] = useState(false);
 
 
     function onSubmit(e) {
         e.preventDefault();
         // TODO: call your auth API
         console.log({email, user, pwd});
+        setLoading(true);
 
         // console.log(URL);
         fetch(LOGIN_URL, {
@@ -42,12 +45,15 @@ export default function Login() {
         }).catch((err) => {
             console.log("error in login", err);
             logout();
+        }).finally(() => {
+            setLoading(false);
         })
 
     }
 
     return (
         <div className="min-h-dvh bg-[#E9F6F9]">
+            {loading && <FullPageLoader />}
             <div className="container-px py-10 md:py-16">
                 <div className="flex flex-col gap-5 items-center">
                     <div>
