@@ -6,7 +6,8 @@ export default function AccountMenu() {
     const [open, setOpen] = useState(false);
     const btnRef = useRef(null);
     const popRef = useRef(null);
-    const {token, user: userAuth, login, logout} = useAuth();
+    // const {token, user: userAuth, login, logout} = useAuth();
+    const {token, user, login, logout} = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -42,7 +43,9 @@ export default function AccountMenu() {
                 aria-expanded={open}
                 aria-label="Account"
             >
-                👤
+                <div className="rounded-full bg-neutral-200 grid place-content-center text-2xl overflow-hidden">
+                    <img src={user.avatarUrl} className="object-cover" alt={user?.firstName} />
+                </div>
             </button>
 
             {open && (
@@ -52,9 +55,9 @@ export default function AccountMenu() {
                     role="menu"
                 >
                     <div className="px-4 py-3 border-b">
-                        <div className="font-semibold">Ramesh ramesh</div>
+                        <div className="font-semibold">{user?.firstName} {user?.lastName}</div>
                         <div className="text-sm text-neutral-600 truncate">
-                            ramesh@gmail.com
+                            {user?.email}
                         </div>
                     </div>
                     <nav className="p-1 text-sm">

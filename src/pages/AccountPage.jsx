@@ -8,9 +8,9 @@ const field =
     "h-11 w-full rounded-xl border border-neutral-300 bg-white px-3 outline-none focus:border-neutral-500 focus:ring-4 focus:ring-neutral-900/5";
 
 export default function AccountPage() {
-    const [name, setName] = useState("Ramesh");
-    const [phone, setPhone] = useState("");
-    const [email, setEmail] = useState("ramesh@gmail.com");
+    // const [name, setName] = useState("Ramesh");
+    // const [phone, setPhone] = useState("");
+    // const [email, setEmail] = useState("ramesh@gmail.com");
     const [altName, setAltName] = useState("");
     const [altPhone, setAltPhone] = useState("");
     const [userData, setUserData] = useState({});
@@ -19,7 +19,7 @@ export default function AccountPage() {
 
     const [address, setAddress] = useState({});
 
-    const {token, user: userAuth, login, logout} = useAuth();
+    const {token, user, setUser, login, logout} = useAuth();
 
     useEffect(() => {
         if (token) {
@@ -42,10 +42,21 @@ export default function AccountPage() {
             return res.json();
         }).then(data => {
             console.log("user details", data);
+            console.log("fname, ", data?.profile?.firstName);
+            console.log("lastName, ", data?.profile?.lastName);
+            console.log("email, ", data?.user?.email);
             setUserData(data);
+            setUser((prev) => ({
+                ...prev,
+                firstName: (data?.profile?.firstName) ? data?.profile?.firstName : data?.user.username,
+                lastName: data?.profile?.lastName,
+                email: data?.user?.email,
+                avatarUrl: data?.profile?.avatarUrl
+            }));
             setProfile(data?.profile)
             setAddress(data?.addresses?.[0]);
             console.log("address", data?.addresses?.[0]);
+
         }).catch(error => {
             console.error(error);
         })
@@ -89,6 +100,7 @@ export default function AccountPage() {
         })
     }
 
+    // console.log("userAuth", user);
     return (
         <>
             <Navbar/>
@@ -100,8 +112,8 @@ export default function AccountPage() {
 
                     <section
                         className="bg-white rounded-2xl border border-neutral-200 shadow-[0_10px_30px_rgba(2,6,23,0.06)] p-4 md:p-5 flex items-center gap-4">
-                        <div className="h-16 w-16 rounded-full bg-neutral-200 grid place-content-center text-2xl">
-                            👤
+                        <div className="h-16 w-16 rounded-full bg-neutral-200 grid place-content-center text-2xl overflow-hidden">
+                            <img src={user.avatarUrl} className="object-cover" alt={user?.firstName} />
                         </div>
                         <div className="min-w-0">
                             <div className="text-[18px] md:text-[20px] font-extrabold leading-tight">
