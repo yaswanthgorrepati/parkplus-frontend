@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {GET_TOKEN, LISTING_SEARCH_URL, LOGIN_URL, SIGN_UP_URL} from "../utils/constants.jsx";
 import {useAuth} from "../utils/AuthContext.jsx";
+import FullPageLoader from "../components/FullPageLoader.jsx";
 
 export default function SignUp() {
     const [email, setEmail] = useState("");
@@ -10,52 +11,59 @@ export default function SignUp() {
     const [pwd, setPwd] = useState("");
     const [showPwd, setShowPwd] = useState(false);
     const navigate = useNavigate();
-    const { token, user: userAuth, login, logout } = useAuth();
+    const {token, user: userAuth, login, logout} = useAuth();
+    const [loading, setLoading] = useState(false);
 
 
     function onSubmit(e) {
 
         e.preventDefault();
-        if(!email.trim() || !phoneNumber.trim() || !pwd.trim() || !userName.trim()) {
-            console.error("Please enter a valid details address");
-            return;
-        }
-        // console.log({email, user, pwd});
-
-        // console.log(URL);
-        fetch(SIGN_UP_URL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + GET_TOKEN(),
-            },
-            body: JSON.stringify({
-                email: email,
-                username: userName,
-                password:pwd,
-                phone:phoneNumber,
-
-            }),
-        }).then((res) => {
-            if (!res.ok) {
-                throw new Error("Failed to sigup");
+        setLoading(true);
+        try {
+            if (!email.trim() || !phoneNumber.trim() || !pwd.trim() || !userName.trim()) {
+                console.error("Please enter a valid details address");
+                return;
             }
-            return res.json();
-        }).then((data) => {
-            console.log("sigup success");
-            console.log(data.userId);
-            // login(data?.accessToken);
-            navigate("/login");
+            // console.log({email, user, pwd});
 
-        }).catch((err) => {
-            console.log("error in sigup", err);
-            logout();
-        })
+            // console.log(URL);
+            fetch(SIGN_UP_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + GET_TOKEN(),
+                },
+                body: JSON.stringify({
+                    email: email,
+                    username: userName,
+                    password: pwd,
+                    phone: phoneNumber,
+
+                }),
+            }).then((res) => {
+                if (!res.ok) {
+                    throw new Error("Failed to sigup");
+                }
+                return res.json();
+            }).then((data) => {
+                console.log("sigup success");
+                console.log(data.userId);
+                // login(data?.accessToken);
+                navigate("/login");
+
+            }).catch((err) => {
+                console.log("error in sigup", err);
+                logout();
+            })
+        } finally {
+            setLoading(false);
+        }
 
     }
 
     return (
         <div className="min-h-dvh bg-[#E9F6F9]">
+            {loading && <FullPageLoader/>}
             <div className="container-px py-10 md:py-16">
                 <div className="flex flex-col gap-5 items-center">
                     <div>
