@@ -1,9 +1,12 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import FooterWide from "../components/FooterWide.jsx";
 import Navbar from "../components/Navbar.jsx";
 import {BOOKING_HISTORY_URL, GET_TOKEN, LISTING_SEARCH_URL} from "../utils/constants.jsx";
+import {useAuth} from "../utils/AuthContext.jsx";
 
 export default function BookingHistory() {
+    const {token, user, login, logout} = useAuth();
+
 
     const [bookingHistory, setBookingHistory] = React.useState([]);
     useEffect(() => {
@@ -36,17 +39,18 @@ export default function BookingHistory() {
                     <section
                         className="bg-white rounded-2xl justify-between border border-neutral-200 shadow-[0_10px_30px_rgba(2,6,23,0.06)] p-4 md:p-5 flex ">
                         <div className="flex gap-2">
-                            <div className="h-16 w-16 rounded-full bg-neutral-200 grid place-content-center text-2xl">
-                                👤
+                            <div
+                                className=" h-16 w-16  rounded-full bg-neutral-200 grid place-content-center text-2xl overflow-hidden">
+                                <img src={user?.avatarUrl} className="object-cover" alt={user?.firstName}/>
                             </div>
                             <div className="flex items-center ">
                                 <div>
                                     <div className="text-[22px] md:text-[24px] font-extrabold leading-tight">
-                                        Hi Ramesh ramesh
+                                        Hi, {user?.firstName} {user?.lastName}
                                     </div>
-                                    <div className="text-sm text-neutral-600">
-                                        <span>⚙️</span> Profile
-                                    </div>
+                                    {/*<div className="text-sm text-neutral-600">*/}
+                                    {/*    <span>⚙️</span> Profile*/}
+                                    {/*</div>*/}
                                 </div>
                             </div>
                         </div>
@@ -114,10 +118,12 @@ export default function BookingHistory() {
                                         </div>
 
                                         <div className="flex flex-col gap-2 text-sm">
-                                            <button className="mt-3 h-11 w-full rounded-xl font-semibold bg-orange-600 hover:bg-red-600 text-gray-900 hover:text-neutral-100 hover:cursor-pointer">
+                                            <button
+                                                className="mt-3 h-11 w-full rounded-xl font-semibold bg-orange-600 hover:bg-red-600 text-gray-900 hover:text-neutral-100 hover:cursor-pointer">
                                                 Cancel / Modify
                                             </button>
-                                            <button className="text-sm font-semibold text-gray-900 hover:bg-green-700 hover:text-neutral-100 bg-green-400 p-3 rounded-lg hover:cursor-pointer">
+                                            <button
+                                                className="text-sm font-semibold text-gray-900 hover:bg-green-700 hover:text-neutral-100 bg-green-400 p-3 rounded-lg hover:cursor-pointer">
                                                 Leave feedback
                                             </button>
                                         </div>

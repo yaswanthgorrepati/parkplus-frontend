@@ -12,6 +12,7 @@ import {
     VERIFY_SIGNATURE_URL
 } from "../utils/constants.jsx";
 import SpaceBookingDetails from "../components/SpaceBookingDetails.jsx";
+import FullPageLoader from "../components/FullPageLoader.jsx";
 
 export default function Checkout() {
     const [freq, setFreq] = useState("");
@@ -21,6 +22,8 @@ export default function Checkout() {
     const [phoneDone, setPhoneDone] = useState(false);
     const [profileDone, setProfileDone] = useState(false);
     const [bookingCreate, setBookingCreate] = useState({});
+
+    const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
 
@@ -60,17 +63,26 @@ export default function Checkout() {
 
     async function handleRequestToBook(sDate, eDate, requiredSpace) {
 
-        //call the booking create api
-        const cb = await createBooking(sDate, eDate, requiredSpace);
-        console.log(cb);
+        setLoading(true);
 
-        //creating the order
-        const co = await createOrder(cb.id);
-        console.log(co);
+        try {
+            //call the booking create api
+            const cb = await createBooking(sDate, eDate, requiredSpace);
+            console.log(cb);
 
-        //razor payment
-        const razorPayPayment = createRazorPayment(co.orderId, co.amount);
-        console.log(razorPayPayment);
+            //creating the order
+            const co = await createOrder(cb.id);
+            console.log(co);
+
+            //razor payment
+            const razorPayPayment = createRazorPayment(co.orderId, co.amount);
+            console.log(razorPayPayment);
+
+        } finally {
+            setLoading(false);
+        }
+
+
     }
 
 
@@ -189,6 +201,7 @@ export default function Checkout() {
 
     return (
         <>
+            {loading && <FullPageLoader/>}
             <Navbar/>
             <div className="bg-neutral-50 text-neutral-900 min-h-dvh">
                 <main className="container-px py-4">
